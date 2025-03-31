@@ -50,6 +50,18 @@
   color: #e74c3c;
 }
 
+.games-won {
+    color: #4CAF50;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.sets-won {
+    color: #9C27B0;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
 button {
   background: #3498db;
   color: white;
@@ -81,4 +93,66 @@ button:disabled {
   .player-container {
     grid-template-columns: 1fr;
   }
+}
+
+/* Добавляем в style.css */
+.match-settings {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.match-settings label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #2c3e50; /* Цвет для светлой темы */
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s;
+}
+
+input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #3498db; /* Цвет активного состояния */
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+  .match-settings {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  .match-settings label {
+    color: #ecf0f1;
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .player {
+    background: #2c3e50;
+  }
+  
+  .player h2 {
+    color: #ecf0f1;
+  }
+}
+
+/* Для Telegram Web App */
+.tg-theme-dark .match-settings label {
+  color: #ecf0f1 !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Для лучшей интерактивности */
+.match-settings label:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+input[type="radio"]:checked + span {
+  font-weight: bold;
+  color: #3498db;
 }
