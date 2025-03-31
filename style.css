@@ -157,3 +157,14 @@ button {
         font-size: 1.5rem;
     }
 }
+
+html, body {
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+.container {
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding-bottom: env(safe-area-inset-bottom); /* Для iOS */
+}
