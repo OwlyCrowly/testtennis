@@ -18,20 +18,20 @@
             </label>
         </div>
         <div class="player-container">
-            <div class="player" id="player1">
+            <div class="player" id="player1" data-player="1">
                 <h2>Игрок 1</h2>
                 <div class="sets-won">Сет: 0</div>
                 <div class="games-won">Гейм: 0</div>
                 <div class="current-score">0</div>
-                <button onclick="addPoint(1)">+ Мяч</button>
+                <button data-point-button onclick="addPoint(1)">+ Мяч</button>
             </div>
             
-            <div class="player" id="player2">
+            <div class="player" id="player2" data-player="2">
                 <h2>Игрок 2</h2>
                 <div class="sets-won">Сет: 0</div>
                 <div class="games-won">Гейм: 0</div>
                 <div class="current-score">0</div>
-                <button onclick="addPoint(2)">+ Мяч</button>
+                <button data-point-button onclick="addPoint(2)">+ Мяч</button>
             </div>
         </div>
         

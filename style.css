@@ -1,170 +1,84 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background-color: #f0f0f0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Изменено для мобильных устройств */
-    padding: 10px; /* Добавлено */
-    min-height: 100vh;
-    overflow: hidden; /* Запрещаем глобальную прокрутку */
+/* Базовый сброс стилей */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+/* Основной контейнер */
 .container {
-    text-align: center;
-    background: white;
-    padding: 1rem 1rem 0.5rem;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 95%; /* Добавлено */
-    max-width: 600px; /* Ограничение максимальной ширины */
-    margin: 10px 0; /* Добавлено */
-    height: calc(100vh - 30px); /* 30px = верхний+нижний padding + margin */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Распределяем пространство */
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
+/* Настройки матча */
+.match-settings {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* Блоки игроков */
 .player-container {
-    display: flex;
-    flex-direction: column; /* Вертикально на мобильных */
-    gap: 1rem;
-    margin-bottom: 1rem;
-    flex-grow: 1; /* Занимает все свободное пространство */
-    overflow-y: auto; /* Разрешаем прокрутку только внутри игроков */
-    padding: 5px; /* Чтобы контент не прилипал к краям */
-}
-
-@media (min-width: 600px) {
-    .player-container {
-        flex-direction: row; /* Горизонтально на десктопе */
-    }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .player {
-    padding: 1rem;
-    border: 2px solid #333;
-    border-radius: 5px;
-    width: 100%; /* Занимает всю ширину контейнера */
-    box-sizing: border-box; /* Учитывает padding в ширине */
-    min-height: 250px; /* Минимальная высота блока игрока */
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.player h2 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+/* Очки и кнопки */
 .current-score {
-    font-size: 2rem; /* Уменьшено для мобильных */
-    margin: 0.5rem 0;
+  font-size: 32px;
+  font-weight: bold;
+  margin: 15px 0;
+  color: #e74c3c;
 }
 
 button {
-    padding: 0.5rem;
-    font-size: 0.9rem;
-    width: 90%; /* Кнопки занимают почти всю ширину */
-    margin: 5px auto; /* Центрирование */
-    background-color: #2196F3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
 }
 
 button:hover {
-    background-color: #1976D2;
+  background: #2980b9;
 }
 
 .reset-btn {
-    background-color: #f44336;
-    flex-shrink: 0; /* Фиксируем кнопку сброса */
-    /*margin-top: 10px;*/
-    margin-top: 5px; /* Уменьшаем отступ сверху */
-    margin-bottom: 5px; /* Добавляем отступ снизу */
+  background: #95a5a6;
+  display: block;
+  width: 100%;
 }
 
-.reset-btn:hover {
-    background-color: #d32f2f;
+button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
 }
 
-.games-won {
-    color: #4CAF50;
-    font-weight: bold;
-    margin-bottom: 1rem;
-}
-
-.sets-won {
-    color: #9C27B0;
-    font-weight: bold;
-    margin-bottom: 1rem;
-}
-
-/*.match-settings {
-    flex-direction: column;  Элементы вертикально 
-    gap: 0.5rem;
-}
-*/
-
-.match-settings {
-    /*margin-bottom: 1.5rem;*/
-    padding: 1rem;
-    background: #f8f8f8;
-    border-radius: 5px;
-    width: 100%; /* Добавлено */
-    box-sizing: border-box; /* Добавлено */
-    display: flex; /* Добавлено */
-    flex-direction: column; /* Добавлено */
-    align-items: center; /* Добавлено */
-    margin-bottom: 0; /* Убираем отступ снизу */
-    flex-shrink: 0; /* Запрещаем сжатие */
-}
-
-.match-settings label {
-    margin-right: 0;
-    display: block;
-    text-align: left;
-}
-
-.disabled {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-#clickButton {
-    touch-action: manipulation;
-}
-
-.container {
-    max-height: 100vh;
-    overflow: hidden;
-}
-
-.player-container {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-button {
-    touch-action: manipulation;
-    min-height: 44px; /* Минимальный размер для касаний */
-}
-
-/* Оптимизация для мобильных устройств */
-@media (max-width: 600px) {
-    .player {
-        min-height: 200px;
-        padding: 0.5rem;
-    }
-    
-    .current-score {
-        font-size: 1.5rem;
-    }
-}
-
-html, body {
-    height: 100% !important;
-    overflow: hidden !important;
-}
-
-.container {
-    min-height: 100vh;
-    box-sizing: border-box;
-    padding-bottom: env(safe-area-inset-bottom); /* Для iOS */
+/* Мобильная адаптация */
+@media (max-width: 480px) {
+  .player-container {
+    grid-template-columns: 1fr;
+  }
 }

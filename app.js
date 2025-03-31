@@ -1,36 +1,3 @@
-// app.js
-document.addEventListener('DOMContentLoaded', () => {
-    const tg = window.Telegram?.WebApp;
-    
-    if (tg) {
-        // 1. Инициализация WebApp
-        tg.ready();
-        
-        // 2. Принудительное раскрытие с задержкой
-        const forceExpand = () => {
-            if (!tg.isExpanded) {
-                tg.expand();
-                console.log('Принудительный expand()');
-            }
-        };
-        
-        // 3. Обработчик изменений вьюпорта
-        tg.onEvent('viewportChanged', forceExpand);
-        
-        // 4. Первый запуск
-        setTimeout(forceExpand, 300); // Задержка для инициализации API
-        
-        // 5. Дополнительная проверка через 1 сек
-        setTimeout(() => {
-            console.log('Состояние после инициализации:', {
-                isExpanded: tg.isExpanded,
-                viewportHeight: tg.viewportHeight
-            });
-        }, 1000);
-    }
-
-
-
 let matchState = {
     p1: { points: 0, games: 0, sets: 0 },
     p2: { points: 0, games: 0, sets: 0 },
@@ -42,15 +9,17 @@ let matchState = {
 };
 
 // Добавляем инициализацию Telegram Web App
-const tg = window.Telegram?.WebApp;
-if (tg) {
-    tg.ready();
-    tg.expand();
-    tg.enableClosingConfirmation();
-
-    tg.onEvent('viewportChanged', () => {
-        tg.expand(); // Всегда держим на весь экран
-    });
+//const tg = window.Telegram?.WebApp;
+if (window.Telegram && window.Telegram.WebApp) {
+  const tg = window.Telegram.WebApp;
+  tg.ready(); // Говорим Telegram, что приложение готово
+  tg.expand(); // Принудительно разворачиваем на весь экран
+  
+  // Блокируем закрытие приложения случайным свайпом
+  tg.enableClosingConfirmation();
+  
+  // Обновляем viewport при изменении ориентации
+  tg.onEvent('viewportChanged', tg.expand);
 }
 
 const pointValues = ['0', '15', '30', '40'];
@@ -76,11 +45,11 @@ function loadState() {
 
 // Основные функции должны быть объявлены перед их использованием
 function getScoreDisplay(current, opponent) {
-    if (current >= 3 && opponent >= 3) {
-        if (current === opponent) return 'Ровно';
-        if (Math.abs(current - opponent) === 1) return current > opponent ? 'Больше' : '-';
-    }
-    return pointValues[current] || '40';
+  if (current >= 3 && opponent >= 3) {
+    if (current === opponent) return 'Ровно';
+    return current > opponent ? 'Больше' : 'Меньше'; // Более понятные обозначения
+  }
+  return ['0', '15', '30', '40'][current] || '40';
 }
 
 function checkGameWinner(player, opponent) {
@@ -153,7 +122,7 @@ function awardGame(player, opponent) {
 
     if (checkSetWinner(player, opponent)) {
         if (!awardSet(player, opponent)) {
-            alert(`Сет ${matchState.currentSet - 1} выиграл ${player === matchState.p1 ? 'Игрок 1' : 'Игрок 2'}!`);
+            //alert(`Сет ${matchState.currentSet - 1} выиграл ${player === matchState.p1 ? 'Игрок 1' : 'Игрок 2'}!`);
         }
     }
 
@@ -180,32 +149,37 @@ function addPoint(playerNumber) {
 }
 
 function updateDisplay() {
-    // Обновление сетами
-    document.querySelectorAll('.sets-won').forEach((el, i) => {
-        el.textContent = `Сеты: ${i === 0 ? matchState.p1.sets : matchState.p2.sets}`;
-    });
-    
-    // Обновление геймами
-    document.querySelector('#player1 .games-won').textContent = `Геймы: ${matchState.p1.games}`;
-    document.querySelector('#player2 .games-won').textContent = `Геймы: ${matchState.p2.games}`;
-    
-    // Обновление очков
-    const p1Points = matchState.isTieBreak ? 
-        matchState.p1.points : 
-        getScoreDisplay(matchState.p1.points, matchState.p2.points);
+     // Обновляем данные для обоих игроков через цикл
+    [1, 2].forEach(playerNumber => {
+        const player = playerNumber === 1 ? matchState.p1 : matchState.p2;
+        const opponent = playerNumber === 1 ? matchState.p2 : matchState.p1;
         
-    const p2Points = matchState.isTieBreak ? 
-        matchState.p2.points : 
-        getScoreDisplay(matchState.p2.points, matchState.p1.points);
-    
-    document.querySelector('#player1 .current-score').textContent = p1Points;
-    document.querySelector('#player2 .current-score').textContent = p2Points;
+        // Находим элементы по data-атрибутам
+        const container = document.querySelector(`[data-player="${playerNumber}"]`);
+        
+        // Обновляем сеты
+        container.querySelector('.sets-won').textContent = `Сеты: ${player.sets}`;
+        
+        // Обновляем геймы
+        container.querySelector('.games-won').textContent = `Геймы: ${player.games}`;
+        
+        // Обновляем очки с учетом тай-брейка
+        const pointsElement = container.querySelector('.current-score');
+        if (matchState.isTieBreak) {
+            pointsElement.textContent = player.points;
+        } else {
+            pointsElement.textContent = getScoreDisplay(player.points, opponent.points);
+        }
+    });
 
-    // Блокировка кнопок
-    const buttons = document.querySelectorAll('button:not(.reset-btn)');
-    buttons.forEach(btn => {
+    // Блокируем кнопки добавления очков при завершении матча
+    const pointButtons = document.querySelectorAll('[data-point-button]');
+    pointButtons.forEach(btn => {
         btn.disabled = matchState.matchWinner !== null;
     });
+
+    // Обновляем статус кнопки сброса
+    document.querySelector('.reset-btn').disabled = false;
 }
 
 function changeMatchFormat(format) {
@@ -245,8 +219,4 @@ document.addEventListener('DOMContentLoaded', () => {
             this.click();
         });
     });
-});
-
-     loadState();
-    updateDisplay();
 });
