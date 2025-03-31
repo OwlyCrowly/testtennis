@@ -1,3 +1,36 @@
+// app.js
+document.addEventListener('DOMContentLoaded', () => {
+    const tg = window.Telegram?.WebApp;
+    
+    if (tg) {
+        // 1. Инициализация WebApp
+        tg.ready();
+        
+        // 2. Принудительное раскрытие с задержкой
+        const forceExpand = () => {
+            if (!tg.isExpanded) {
+                tg.expand();
+                console.log('Принудительный expand()');
+            }
+        };
+        
+        // 3. Обработчик изменений вьюпорта
+        tg.onEvent('viewportChanged', forceExpand);
+        
+        // 4. Первый запуск
+        setTimeout(forceExpand, 300); // Задержка для инициализации API
+        
+        // 5. Дополнительная проверка через 1 сек
+        setTimeout(() => {
+            console.log('Состояние после инициализации:', {
+                isExpanded: tg.isExpanded,
+                viewportHeight: tg.viewportHeight
+            });
+        }, 1000);
+    }
+
+
+
 let matchState = {
     p1: { points: 0, games: 0, sets: 0 },
     p2: { points: 0, games: 0, sets: 0 },
@@ -212,4 +245,8 @@ document.addEventListener('DOMContentLoaded', () => {
             this.click();
         });
     });
+});
+
+     loadState();
+    updateDisplay();
 });
